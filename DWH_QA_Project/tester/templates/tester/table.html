@@ -1,0 +1,45 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'tester/style.css' %}" />
+<p><a href="{% url 'tester:index' %}">Main</a></p>
+<form action="{% url 'tester:table' table.id %}" method="post">
+    {% csrf_token %}
+    <h1>{{ table.schema.schema_name }}.{{ table.table_name }}</h1>
+    <p>Exists in prod?: {{ table.exist_in_prod }}</p>
+    <p>
+        <label for="id_test_script_dev_to_prod_compare">Test script dev to prod compare:</label><br>
+        <textarea cols="100" id="id_test_script_dev_to_prod_compare" name="test_script_dev_to_prod_compare" rows="5">{%if table.test_script_dev_to_prod_compare%}{{table.test_script_dev_to_prod_compare}}{%endif%}</textarea>
+    </p>
+    <p>
+        test_value_dev_to_prod_compare_dev: {{ table.test_value_dev_to_prod_compare_dev }}
+        <br>
+        test_value_dev_to_prod_compare_prod: {{ table.test_value_dev_to_prod_compare_prod }}
+    </p>
+    <p>
+        <label for="id_test_script_uniqueness">Test script uniqueness:</label><br>
+        <textarea cols="100" id="id_test_script_uniqueness" name="test_script_uniqueness" rows="5">{%if table.test_script_uniqueness%}{{table.test_script_uniqueness}}{%endif%}</textarea>
+    </p>
+    <p>
+        test_value_uniqueness_dev: {{ table.test_value_uniqueness_dev }}
+        <br>
+        test_value_uniqueness_prod: {{ table.test_value_uniqueness_prod }}
+    </p>
+    <p>
+        <label for="id_test_script_completeness_source">Test script completeness source:</label><br>
+        <textarea cols="100" id="id_test_script_completeness_source" name="test_script_completeness_source" rows="5">{%if table.test_script_completeness_source%}{{table.test_script_completeness_source}}{%endif%}</textarea>
+    </p>
+    <p>
+        <label for="id_test_script_completeness_target">Test script completeness target:</label><br>
+        <textarea cols="100" id="id_test_script_completeness_target" name="test_script_completeness_target" rows="5">{%if table.test_script_completeness_target%}{{table.test_script_completeness_target}}{%endif%}</textarea>
+    </p>
+    <p>
+        test_value_completeness_source_dev: {{ table.test_value_completeness_source_dev }}
+        <br>
+        test_value_completeness_target_dev: {{ table.test_value_completeness_target_dev }}
+    </p>
+    <p>
+        test_value_completeness_source_prod: {{ table.test_value_completeness_source_prod }}
+        <br>
+        test_value_completeness_target_prod: {{ table.test_value_completeness_target_prod }}
+    </p>
+    <input type="submit" value="Submit" />
+</form>

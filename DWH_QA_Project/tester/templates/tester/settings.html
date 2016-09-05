@@ -1,0 +1,20 @@
+<p><a href="{% url 'tester:index' %}">main</a></p>
+<h1>{{ db }}</h1>
+<h3>{{ db.connection_string }}</h3>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'tester:set_active_schemas' %}" method="post">
+{% csrf_token %}
+{% for schema in db.schema_set.all %}
+    <label for="schema{{ forloop.counter }}">{{ schema.schema_name }}</label>
+    <input type="checkbox" name="{{ schema.schema_name }}" id="schema{{ forloop.counter }}" value="{{ schema.schema_name }}" {% if schema.is_active %} checked {% endif %} /><br />
+{% endfor %}
+<input type="submit" value="Save" />
+</form>
+
+
+<form action="{% url 'tester:schemas_refresh'%}" method="post">
+{% csrf_token %}
+<input type="submit" value="Refresh schemas list" />
+</form>

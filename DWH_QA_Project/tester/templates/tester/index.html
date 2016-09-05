@@ -1,0 +1,125 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'tester/style.css' %}" />
+<script>
+    var loading = "{% static 'tester/loading.gif' %}";
+</script>
+<script type="text/javascript" src="{% static 'tester/jquery-3.1.0.js' %}"></script>
+<script type="text/javascript" src="{% static 'tester/tester.js' %}"></script>
+{% if db %}
+<p><a href="{% url 'tester:settings' %}">Настройки</a></p>
+{% if db.schema_set.all %}
+<p>
+    <button type="button" class="do_all_tests">Выполнить все тесты</button>
+</p>
+<table>
+    <tr>
+        <th>Схема</th>
+        <th>Таблица</th>
+        <th>Есть на прод</th>
+        <th>Дев vs Прод</th>
+        <th>Дубли дев</th>
+        <th>Дубли прод</th>
+        <th>Полнота дев</th>
+        <th>Полнота прод</th>
+    </tr>
+    {% for schema in db.schema_set.all %}
+    {% if schema.is_active %}
+    {% for table in schema.table_set.all %}
+    <tr>
+        <td class="schema_td">{{ schema.schema_name }}</td>
+        <td class="table_td"><a href="{% url 'tester:table' table.id %}">{{ table.table_name }}</a></td>
+        <td class="exist_td">
+            <table>
+                <tr>
+                    <td>
+                        <div id="div_exist_{{table.id}}" data-tabid="{{table.id}}" class="status_div exist_div {{ table.get_exist_on_prod_status.0 }}">{{ table.get_exist_on_prod_status.1 }}</div>
+                    </td>
+                    <td>
+                        <button type="button" data-tabid="{{table.id}}" class="do_test_exist_btn reload_btn">
+                            <img class="reload_img" src="{% static 'tester/rerun.png' %}" alt="Rerun">
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td class="dtpc_td">
+            <table>
+                <tr>
+                    <td>
+                        <div id="div_dtpc_{{table.id}}" data-tabid="{{table.id}}" class="status_div dtpc_div {{ table.get_dev_to_prod_compare_status.0 }}">{{ table.get_dev_to_prod_compare_status.1 }}</div>
+                    </td>
+                    <td>
+                        <button type="button" data-tabid="{{table.id}}" class="do_test_dtpc reload_btn">
+                            <img class="reload_img" src="{% static 'tester/rerun.png' %}" alt="Rerun">
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td class="uniq_dev">
+            <table>
+                <tr>
+                    <td>
+                        <div id="div_uniq_dev_{{table.id}}" data-tabid="{{table.id}}" class="status_div uniq_dev_div {{ table.get_uniqueness_status_dev.0 }}">{{ table.get_uniqueness_status_dev.1 }}</div>
+                    </td>
+                    <td>
+                        <button type="button" data-tabid="{{table.id}}" class="do_test_uniq_dev reload_btn">
+                            <img class="reload_img" src="{% static 'tester/rerun.png' %}" alt="Rerun">
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td class="uniq_prod">
+            <table>
+                <tr>
+                    <td>
+                        <div id="div_uniq_prod_{{table.id}}" data-tabid="{{table.id}}" class="status_div uniq_prod_div {{ table.get_uniqueness_status_prod.0 }}">{{ table.get_uniqueness_status_prod.1 }}</div>
+                    </td>
+                    <td>
+                        <button type="button" data-tabid="{{table.id}}" class="do_test_uniq_prod reload_btn">
+                            <img class="reload_img" src="{% static 'tester/rerun.png' %}" alt="Rerun">
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td class="complete_dev">
+            <table>
+                <tr>
+                    <td>
+                        <div id="div_complete_dev_{{table.id}}" data-tabid="{{table.id}}" class="status_div complete_dev_div {{ table.get_complete_status_dev.0 }}">{{ table.get_complete_status_dev.1 }}</div>
+                    </td>
+                    <td>
+                        <button type="button" data-tabid="{{table.id}}" class="do_test_complete_dev reload_btn">
+                            <img class="reload_img" src="{% static 'tester/rerun.png' %}" alt="Rerun">
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td class="complete_prod">
+            <table>
+                <tr>
+                    <td>
+                        <div id="div_complete_prod_{{table.id}}" data-tabid="{{table.id}}" class="status_div complete_prod_div {{ table.get_complete_status_prod.0 }}">{{ table.get_complete_status_prod.1 }}</div>
+                    </td>
+                    <td>
+                        <button type="button" data-tabid="{{table.id}}" class="do_test_complete_prod reload_btn">
+                            <img class="reload_img" src="{% static 'tester/rerun.png' %}" alt="Rerun">
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    {% endfor %}
+</table>
+{% else %}
+<p>No schemas are available.</p>
+{% endif %}
+{% else %}
+<p>No DBs are available.</p>
+{% endif %}
