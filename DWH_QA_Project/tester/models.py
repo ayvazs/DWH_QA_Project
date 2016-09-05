@@ -1,9 +1,6 @@
 from django.db import models
 from django.urls import reverse
 
-# Create your models here.
-# todo Добавить модель типа подключения с типовыми запросами на список схем и таблиц
-
 
 class DataBase(models.Model):
 	database_name = models.CharField(max_length = 50)

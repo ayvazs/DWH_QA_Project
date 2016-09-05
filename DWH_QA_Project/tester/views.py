@@ -9,13 +9,13 @@ import json
 
 def index(request):
 	db = DataBase.objects.all()[0]
-	context = {'db': db,}
+	context = {'db': db, }
 	return render(request, 'tester/index.html', context)
 
 
 def settings(request):
 	db = DataBase.objects.all()[0]
-	context = {'db': db,}
+	context = {'db': db, }
 	return render(request, 'tester/settings.html', context)
 
 
